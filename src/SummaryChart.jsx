@@ -1,3 +1,4 @@
+// @flow
 import React from 'react';
 import { createFragmentContainer, graphql} from 'react-relay';
 import _ from 'lodash';
@@ -63,7 +64,7 @@ const SummaryChart = ({totals}) => {
         data: ds.data,
         label: ds.label,
         fillColor: seriesColors[index].color,
-        strokeColor: seriesColors[index].auxColor,
+        //strokeColor: seriesColors[index].auxColor,
         pointColor: seriesColors[index].auxColor,
         pointStrokeColor: "#fff",
         pointHighlightFill: "#fff",
