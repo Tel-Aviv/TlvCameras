@@ -78,6 +78,30 @@ class AppLayout extends React.Component {
           observationRecord.setValue(observedMotorcyrcles + __motorcycles, 'motorcyrcles');
         }
 
+        const trafficRecord = root.getLinkedRecord('traffic', {
+          beforeHours: new Date().getHours() + 1
+        });
+        if( trafficRecord ) {
+          let seriesRecords = trafficRecord.getLinkedRecords('series');
+          if( seriesRecords ) {
+              for(let i = 0; i < seriesRecords.length; i++) {
+                let label = seriesRecords[i].getValue('label');
+
+                let data = seriesRecords[i].getValue('data');
+                let _data =   _.map(data, _.clone); // clone data in order to be able to change it
+                if( label == 'Cars' ) {
+                  _data[_data.length - 1] += __cars;
+                } else if( label == 'Bikes' ) {
+                  _data[_data.length - 1] += __bikes;
+                } else if( label == 'Motorcyrcles') {
+                  _data[_data.length - 1] += __motorcycles;
+                }
+
+                seriesRecords[i].setValue(_data, 'data');
+              }
+          }
+        }
+
       },
       onError: error => {
         console.error(`An error occured:`, error);
