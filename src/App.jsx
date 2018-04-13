@@ -1,5 +1,5 @@
 import React from 'react';
-import { QueryRenderer, graphql } from 'react-relay';
+import { requestSubscription, QueryRenderer, graphql } from 'react-relay';
 import environment from './Environment';
 
 import SummaryCars from './SummaryCars';
@@ -7,14 +7,26 @@ import SummaryBikes from './SummaryBikes';
 import SummaryMotorcycles from './SummaryMotorcycles';
 
 const summariesQuery = graphql`
-query AppSummaries_Query
+query AppSummaries_Query ($Id: Int!,
+                          $beforeHours: Int)
 {
-  camera {
-    ...SummaryCars_totals
-    ...SummaryBikes_totals
-    ...SummaryMotorcycles_totals
+  camera(Id: $Id, beforeHours: $beforeHours) {
+    ...SummaryCars_totals @arguments(Id: $Id)
+    ...SummaryBikes_totals @arguments(Id: $Id)
+    ...SummaryMotorcycles_totals @arguments(Id: $Id)
   }
 }
+`;
+
+const observationsSubscription = graphql`
+  subscription App_Subscription {
+    newObservtion{
+      cars
+      bikes
+      motorcyrcles
+      when_observed
+    }
+  }
 `;
 
 class AppLayout extends React.Component {
@@ -24,6 +36,25 @@ class AppLayout extends React.Component {
     super();
 
     this.renderSummaries = this.renderSummaries.bind(this);
+  }
+
+  componentDidMount() {
+
+    const subscriptionConfig = {
+      subscription: observationsSubscription,
+      variables: {},
+      onNext: payload => {
+        console.log('onNext');
+      },
+      onError: error => {
+        console.error(`An error occured:`, error);
+      }
+    };
+
+    requestSubscription(
+      environment,
+      subscriptionConfig
+    );
   }
 
   renderSummaries({error, props}) {
@@ -59,7 +90,10 @@ class AppLayout extends React.Component {
 
   render() {
 
-      let queryVariables = {};
+      let queryVariables = {
+        Id: 4,
+        beforeHours: 24
+      };
 
       return <QueryRenderer
                 environment={environment}
