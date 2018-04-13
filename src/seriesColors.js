@@ -8,8 +8,8 @@ const seriesColors = [
     auxColor: 'rgba(151,187,205,1)'
   },
   {
-    color: 'rgba(72,72,72,0.2)',
-    auxColor: 'rgba(72,72,72,1)'
+    color: 'rgba(0,83,119,0.2)',
+    auxColor: 'rgba(0,83,119,1)'
   }
 ];
 
