@@ -3,6 +3,7 @@ import { createFragmentContainer, graphql} from 'react-relay';
 import _ from 'lodash';
 var BarChart = require("react-chartjs").Bar;
 
+import seriesColors from './seriesColors';
 
 //
 // Chart data should be shaped as follows:
@@ -54,23 +55,21 @@ var chartOptions = {
   datasetFill : true,
 }
 
-class SummaryChart extends React.Component {
+const SummaryChart = ({totals}) => {
 
-  render() {
-
-    let totals = this.props.totals;
     let _series = totals.series.map( (ds, index) => {
 
       return {
         data: ds.data,
         label: ds.label,
-        fillColor: "rgba(151,187,205,0.2)",
-        strokeColor: "rgba(151,187,205,1)",
-        pointColor: "rgba(151,187,205,1)",
+        fillColor: seriesColors[index].color,
+        strokeColor: seriesColors[index].auxColor,
+        pointColor: seriesColors[index].auxColor,
         pointStrokeColor: "#fff",
         pointHighlightFill: "#fff",
-        pointHighlightStroke: "rgba(151,187,205,1)"
+        pointHighlightStroke: seriesColors[index].auxColor
       }
+
     });
 
     let _chartData = {
@@ -93,7 +92,6 @@ class SummaryChart extends React.Component {
         </div>
       </div>
     );
-  }
 
 };
 
