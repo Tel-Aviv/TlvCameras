@@ -1,0 +1,1 @@
+This file is solely exists to maintain empty directory for Github. This directory is used for Relay-generated files and must exists prior to running reay-compiler
