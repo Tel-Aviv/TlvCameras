@@ -5,6 +5,7 @@ import environment from './Environment';
 import SummaryCars from './SummaryCars';
 import SummaryBikes from './SummaryBikes';
 import SummaryMotorcycles from './SummaryMotorcycles';
+import SummaryChart from './SummaryChart';
 
 const summariesQuery = graphql`
 query AppSummaries_Query ($Id: Int!,
@@ -107,6 +108,7 @@ class AppLayout extends React.Component {
                         <SummaryCars totals={props.camera} />
                         <SummaryBikes totals={props.camera}/>
                         <SummaryMotorcycles totals={props.camera}  />
+                        <SummaryChart />
                     </div>
                     </div>
                   </main>
