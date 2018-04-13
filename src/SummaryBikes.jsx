@@ -3,7 +3,7 @@ import { createFragmentContainer, graphql} from 'react-relay';
 
 const SummaryBikes = ({totals}) => {
 
-    let count = totals.bikes;
+    let count = totals.observation.bikes;
 
     return (<div className="col-lg-4">
               <div className="card card-body">
@@ -22,8 +22,13 @@ const SummaryBikes = ({totals}) => {
 export default createFragmentContainer(SummaryBikes,
 graphql`
   fragment SummaryBikes_totals on Camera
+  @argumentDefinitions(
+    Id: { type: "Int", defaultValue: 1 }
+  )
   {
-    id
-    bikes
+    observation {
+      bikes
+      when_observed
+    }
   }
 `);
