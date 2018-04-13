@@ -47,9 +47,6 @@ class AppLayout extends React.Component {
     const subscriptionConfig = {
       subscription: observationsSubscription,
       variables: {},
-      onNext: payload => {
-        console.log('onNext');
-      },
       updater: proxyStore => {
         //  Reading values off the Payload
         const rootField = proxyStore.getRootField('newObservtion');
