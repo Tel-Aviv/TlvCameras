@@ -46,6 +46,35 @@ class AppLayout extends React.Component {
       onNext: payload => {
         console.log('onNext');
       },
+      updater: proxyStore => {
+        //  Reading values off the Payload
+        const rootField = proxyStore.getRootField('newObservtion');
+        const __cars = rootField.getValue('cars');
+        const __bikes = rootField.getValue('bikes');
+        const __motorcycles = rootField.getValue('motorcyrcles');
+
+        // Reading Values off the Relay Store
+        let root = proxyStore.getRoot();
+        let _type = root.getType();
+
+        const cameraRecord = root.getLinkedRecord('camera', {
+          Id: 4,
+          beforeHours: 24
+        });
+        if( cameraRecord ) {
+          const observationRecord = cameraRecord.getLinkedRecord('observation');
+
+          let observedCars = observationRecord.getValue('cars');
+          observationRecord.setValue(observedCars + __cars, 'cars');
+
+          let observedBikes = observationRecord.getValue('bikes');
+          observationRecord.setValue(observedBikes + __bikes, 'bikes');
+
+          let observedMotorcyrcles = observationRecord.getValue('motorcyrcles');
+          observationRecord.setValue(observedMotorcyrcles + __motorcycles, 'motorcyrcles');
+        }
+
+      },
       onError: error => {
         console.error(`An error occured:`, error);
       }
