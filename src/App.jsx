@@ -16,6 +16,9 @@ query AppSummaries_Query ($Id: Int!,
     ...SummaryBikes_totals @arguments(Id: $Id)
     ...SummaryMotorcycles_totals @arguments(Id: $Id)
   }
+  traffic(beforeHours: $beforeHours) {
+    ...SummaryChart_totals
+  }
 }
 `;
 
@@ -60,7 +63,7 @@ class AppLayout extends React.Component {
 
         const cameraRecord = root.getLinkedRecord('camera', {
           Id: 4,
-          beforeHours: 24
+          beforeHours: new Date().getHours() + 1
         });
         if( cameraRecord ) {
           const observationRecord = cameraRecord.getLinkedRecord('observation');
@@ -108,7 +111,7 @@ class AppLayout extends React.Component {
                         <SummaryCars totals={props.camera} />
                         <SummaryBikes totals={props.camera}/>
                         <SummaryMotorcycles totals={props.camera}  />
-                        <SummaryChart />
+                        <SummaryChart totals={props.traffic}/>
                     </div>
                     </div>
                   </main>
@@ -123,7 +126,7 @@ class AppLayout extends React.Component {
 
       let queryVariables = {
         Id: 4,
-        beforeHours: 24
+        beforeHours: new Date().getHours() + 1
       };
 
       return <QueryRenderer
