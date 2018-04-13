@@ -5,7 +5,7 @@ import {
   Store,
   QueryResponseCache
 } from 'relay-runtime';
-//import { SubscriptionClient } from 'subscriptions-transport-ws'
+import { SubscriptionClient } from 'subscriptions-transport-ws'
 
 const cache = new QueryResponseCache({size: 100, ttl: 100000});
 
@@ -62,18 +62,18 @@ function setupSubscription(
 ) {
   const query = config.text;
 
-  // const subscriptionClient = new SubscriptionClient(websocketURL,
-  //                                                   {
-  //                                                     reconnect: true
-  //                                                   });
-  // subscriptionClient.subscribe({query, variables},
-  //   (error, result) => {
-  //     observer.onNext({data: result})
-  //   })
+  const subscriptionClient = new SubscriptionClient(websocketURL,
+                                                    {
+                                                      reconnect: true
+                                                    });
+  subscriptionClient.subscribe({query, variables},
+    (error, result) => {
+      observer.onNext({data: result})
+    })
 }
 
 const environment = new Environment({
-  network: Network.create(fetchQuery),
+  network: Network.create(fetchQuery, setupSubscription),
   store: new Store(new RecordSource()),
 });
 
