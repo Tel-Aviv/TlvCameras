@@ -20,6 +20,9 @@ query AppSummaries_Query ($Id: Int!,
   traffic(beforeHours: $beforeHours) {
     ...SummaryChart_totals
   }
+  devices {
+    ...GMap_devices
+  }
 }
 `;
 
@@ -125,7 +128,7 @@ class AppLayout extends React.Component {
                   <main className="main-container">
                     <div className="main-content">
                       <div className="row">
-                        <GMap />
+                        <GMap devices={props.devices[0]} />
                         <SummaryCars totals={props.camera} />
                         <SummaryBikes totals={props.camera}/>
                         <SummaryMotorcycles totals={props.camera}  />
