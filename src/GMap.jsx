@@ -1,6 +1,16 @@
 import React from 'react';
 import { Gmaps, Marker, InfoWindow, Circle } from 'react-gmaps';
 import { createFragmentContainer, graphql} from 'react-relay';
+import environment from './Environment';
+
+const mutation = graphql`
+  mutation GMap_Mutation (
+    $cameraId: Int!
+  )
+  {
+    currentCamera(cameraId: $cameraId)
+  }
+`
 
 const coords = {
   lat: 32.11,
