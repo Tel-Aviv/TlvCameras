@@ -23,20 +23,18 @@ class GMap extends React.Component {
     this.cameraClicked = this.cameraClicked.bind(this);
   }
 
-  cameraClicked(cameraId: integer) {
+  cameraClicked(cameraId: integer,
+                cameraName: String) {
     console.log(cameraId)
 
     this.props.dispatch({
       type: 'CAMERA_ID_CHANGED',
       data: {
-        cameraId: cameraId
+        cameraId: cameraId,
+        cameraName: cameraName
       }
 
     });
-
-    const variables = {
-      cameraId: cameraId
-    };
 
   }
 
@@ -52,6 +50,7 @@ class GMap extends React.Component {
   render() {
 
     let device = this.props.devices;
+    const cameraName = device.name;
     const lng = device.lat; // !!! opposite coordinates
     const lat = device.lng; // !!! opposite coordinates
 
@@ -70,15 +69,13 @@ class GMap extends React.Component {
                   lat={lat}
                   lng={lng}
                   draggable={false}
-                  cameraId={device.cameraId}
-                  onClick={ () => this.cameraClicked(device.cameraId) }
+                  onClick={ () => this.cameraClicked(device.cameraId, device.name) }
                 />
                 <Marker
                   lat={32.14}
                   lng={34.82}
                   draggable={false}
-                  cameraId={device.cameraId}
-                  onClick={ () => this.cameraClicked(device.cameraId) }
+                  onClick={ () => this.cameraClicked(device.cameraId, device.name) }
                 />
 
               </Gmaps>
