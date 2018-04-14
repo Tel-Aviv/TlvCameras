@@ -24,7 +24,8 @@ class GMap extends React.Component {
   }
 
   onClick(e) {
-    console.log('onClick', e);
+    //console.log('onClick', e);
+    console.log(this.cameraId);
   }
 
   render() {
