@@ -51,31 +51,33 @@ class GMap extends React.Component {
 
   render() {
 
-    let devices = this.props.devices;
+    let device = this.props.devices;
+    const lng = device.lat; // !!! opposite
+    const lat = device.lng; // !!! opposite
 
     return (<div className="col-lg-3">
               <Gmaps
                 width={'300px'}
                 height={'160px'}
-                lat={coords.lat}
-                lng={coords.lng}
+                lat={lat}
+                lng={lng}
                 zoom={16}
                 loadingMessage={'Loading cameras...'}
                 params={params}
                 onMapCreated={this.onMapCreated}>
 
                 <Marker
-                  lat={coords.lat}
-                  lng={coords.lng}
+                  lat={lat}
+                  lng={lng}
                   draggable={false}
-                  cameraId={11}
+                  cameraId={device.cameraId}
                   onClick={ () => this.cameraClicked(11) }
                 />
                 <Marker
                   lat={32.14}
                   lng={34.82}
                   draggable={false}
-                  cameraId={12}
+                  cameraId={device.cameraId}
                   onClick={ () => this.cameraClicked(12) }
                 />
 
