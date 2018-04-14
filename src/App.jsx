@@ -1,5 +1,6 @@
 import React from 'react';
 import { requestSubscription, QueryRenderer, graphql } from 'react-relay';
+import { connect } from 'react-redux'
 import environment from './Environment';
 
 import GMap from './GMap';
@@ -28,8 +29,12 @@ query AppSummaries_Query ($cameraId: Int!,
 `;
 
 const observationsSubscription = graphql`
-  subscription App_Subscription {
-    newObservtion{
+  subscription App_Subscription
+  (
+    $cameraId: Int!
+  )
+  {
+    newObservtion (cameraId: $cameraId) {
       cars
       bikes
       motorcyrcles
@@ -44,14 +49,27 @@ class App extends React.Component {
   {
     super();
 
+    this.state = {
+      subscription: {}
+    }
+
     this.renderSummaries = this.renderSummaries.bind(this);
+  }
+
+  UNSAFE_componentWillReceiveProps(nextProps){
+    console.log(nextProps);
+    //this.state.subscription.dispose();
   }
 
   componentDidMount() {
 
+    const _variables = {
+      cameraId: 0
+    }
+
     const subscriptionConfig = {
       subscription: observationsSubscription,
-      variables: {},
+      variables: _variables,
       updater: proxyStore => {
         //  Reading values off the Payload
         const rootField = proxyStore.getRootField('newObservtion');
@@ -81,6 +99,7 @@ class App extends React.Component {
         }
 
         const trafficRecord = root.getLinkedRecord('traffic', {
+          cameraId: 0,
           beforeHours: new Date().getHours() + 1
         });
         if( trafficRecord ) {
@@ -110,10 +129,14 @@ class App extends React.Component {
       }
     };
 
-    requestSubscription(
+    let disposable = requestSubscription(
       environment,
       subscriptionConfig
     );
+
+    this.setState({
+      subscription: disposable
+    });
   }
 
   renderSummaries({error, props}) {
@@ -158,4 +181,12 @@ class App extends React.Component {
 
 }
 
-export default App;
+function mapStateToProps(state) {
+
+  return {
+    cameraId: state.cameraId
+  }
+
+}
+
+export default connect(mapStateToProps)(App);
