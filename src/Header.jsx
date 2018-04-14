@@ -6,6 +6,14 @@ const Header = ({cameraId, cameraName}) => {
     let _cameraId = cameraId != 0 ?
                     <div>{cameraId}</div> :
                     null;
+    let _arrowDown = cameraId == 0 ?
+                    <span className="topbar-btn has-new" data-toggle="dropdown">
+                      <i className="ti-arrow-down">
+                      </i>
+                    </span> :
+                    null;
+
+
 
     if( cameraName == '' ) {
       cameraName = "Please, select a camera on the map";
@@ -13,8 +21,9 @@ const Header = ({cameraId, cameraName}) => {
 
     return (<header className='topbar'>
               <div className='topbar-left'>
-                 <div>{cameraName}</div>
-                 <div>{_cameraId}</div>
+                  {_arrowDown}
+                   <div>{cameraName}</div>
+                   <div>{_cameraId}</div>
               </div>
             </header>
             );
