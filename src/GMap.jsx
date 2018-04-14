@@ -16,16 +16,11 @@ class GMap extends React.Component {
 
   onMapCreated(map) {
     map.setOptions({
-      disableDefaultUI: false
+      disableDefaultUI: true,
+      clickableIcons: false,
+      fullscreenControl: true,
+      zoomControl: false
     });
-  }
-
-  onDragEnd(e) {
-    console.log('onDragEnd', e);
-  }
-
-  onCloseClick() {
-    console.log('onCloseClick');
   }
 
   onClick(e) {
@@ -49,8 +44,13 @@ class GMap extends React.Component {
                 <Marker
                   lat={coords.lat}
                   lng={coords.lng}
-                  draggable={true}
-                  onDragEnd={this.onDragEnd} />
+                  draggable={false}
+                  onClick={this.onClick} />
+                <Marker
+                  lat={32.14}
+                  lng={34.82}
+                  draggable={false}
+                  onClick={this.onClick} />
 
               </Gmaps>
             </div>)
