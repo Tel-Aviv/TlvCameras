@@ -5,7 +5,7 @@ const SummaryCars = ({totals}) =>  {
 
     let count = totals.observation.cars;
 
-    return (<div className="col-lg-4">
+    return (<div className="col-lg-3">
               <div className="card card-body">
                   <h6>Cars</h6>
                   <br />
