@@ -34,7 +34,7 @@ const observationsSubscription = graphql`
     $cameraId: Int!
   )
   {
-    newObservtion (cameraId: $cameraId) {
+    newObservation (cameraId: $cameraId) {
       cars
       bikes
       motorcyrcles
