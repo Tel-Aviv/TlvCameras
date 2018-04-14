@@ -9,15 +9,16 @@ import SummaryMotorcycles from './SummaryMotorcycles';
 import SummaryChart from './SummaryChart';
 
 const summariesQuery = graphql`
-query AppSummaries_Query ($Id: Int!,
+query AppSummaries_Query ($cameraId: Int!,
                           $beforeHours: Int)
 {
-  camera(Id: $Id, beforeHours: $beforeHours) {
-    ...SummaryCars_totals @arguments(Id: $Id)
-    ...SummaryBikes_totals @arguments(Id: $Id)
-    ...SummaryMotorcycles_totals @arguments(Id: $Id)
+  camera(cameraId: $cameraId, beforeHours: $beforeHours) {
+    cameraId
+    ...SummaryCars_totals @arguments(Id: $cameraId)
+    ...SummaryBikes_totals @arguments(Id: $cameraId)
+    ...SummaryMotorcycles_totals @arguments(Id: $cameraId)
   }
-  traffic(beforeHours: $beforeHours) {
+  traffic(cameraId: $cameraId, beforeHours: $beforeHours) {
     ...SummaryChart_totals
   }
   devices {
@@ -37,7 +38,7 @@ const observationsSubscription = graphql`
   }
 `;
 
-class AppLayout extends React.Component {
+class App extends React.Component {
 
   constructor()
   {
@@ -63,7 +64,7 @@ class AppLayout extends React.Component {
         let _type = root.getType();
 
         const cameraRecord = root.getLinkedRecord('camera', {
-          Id: 4,
+          cameraId: 0,
           beforeHours: new Date().getHours() + 1
         });
         if( cameraRecord ) {
@@ -123,9 +124,7 @@ class AppLayout extends React.Component {
                   </div>
               </main>)
 		} else if ( props ) {
-       return (
-              <React.Fragment>
-                  <main className="main-container">
+       return (<main className="main-container">
                     <div className="main-content">
                       <div className="row">
                         <GMap devices={props.devices[0]} />
@@ -136,7 +135,6 @@ class AppLayout extends React.Component {
                     </div>
                     </div>
                   </main>
-                </React.Fragment>
                )
     }
 
@@ -146,7 +144,7 @@ class AppLayout extends React.Component {
   render() {
 
       let queryVariables = {
-        Id: 4,
+        cameraId: 0,
         beforeHours: new Date().getHours() + 1
       };
 
@@ -160,4 +158,4 @@ class AppLayout extends React.Component {
 
 }
 
-export default AppLayout;
+export default App;
