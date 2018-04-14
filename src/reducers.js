@@ -2,7 +2,8 @@
 import _ from 'lodash';
 
 const INITIAL_STATE = {
-  cameraId: 0
+  cameraId: 0,
+  cameraName: ''
 };
 
 const reducers = (state = INITIAL_STATE, action) => {
@@ -11,7 +12,8 @@ const reducers = (state = INITIAL_STATE, action) => {
 
     case 'CAMERA_ID_CHANGED': {
       state = _.assign({}, state, {
-        cameraId: action.data.cameraId
+        cameraId: action.data.cameraId,
+        cameraName: action.data.cameraName
       });
     }
     break;
