@@ -1,6 +1,6 @@
 // @flow
 import React from 'react';
-import { createFragmentContainer, graphql} from 'react-relay';
+import { createFragmentContainer, createRefetchContainer, graphql} from 'react-relay';
 import _ from 'lodash';
 var BarChart = require("react-chartjs").Bar;
 
@@ -96,14 +96,27 @@ const SummaryChart = ({totals}) => {
 
 };
 
-export default createFragmentContainer(SummaryChart,
+export default createRefetchContainer(SummaryChart,
 graphql`
-  fragment SummaryChart_totals on Series {
+  fragment SummaryChart_totals on Series
+  {
     labels
     series {
       label
       data
       ruleId
+    }
+  }
+`,
+graphql`
+  query SummaryChart_RefetchQuery
+  (
+    $cameraId: Int!,
+    $beforeHours: Int
+  )
+  {
+    traffic(cameraId: $cameraId, beforeHours: $beforeHours) {
+      ...SummaryChart_totals
     }
   }
 `);
