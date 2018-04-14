@@ -52,8 +52,8 @@ class GMap extends React.Component {
   render() {
 
     let device = this.props.devices;
-    const lng = device.lat; // !!! opposite
-    const lat = device.lng; // !!! opposite
+    const lng = device.lat; // !!! opposite coordinates
+    const lat = device.lng; // !!! opposite coordinates
 
     return (<div className="col-lg-3">
               <Gmaps
@@ -71,14 +71,14 @@ class GMap extends React.Component {
                   lng={lng}
                   draggable={false}
                   cameraId={device.cameraId}
-                  onClick={ () => this.cameraClicked(11) }
+                  onClick={ () => this.cameraClicked(device.cameraId) }
                 />
                 <Marker
                   lat={32.14}
                   lng={34.82}
                   draggable={false}
                   cameraId={device.cameraId}
-                  onClick={ () => this.cameraClicked(12) }
+                  onClick={ () => this.cameraClicked(device.cameraId) }
                 />
 
               </Gmaps>
