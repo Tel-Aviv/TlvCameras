@@ -24,6 +24,17 @@ const params = {
 
 class GMap extends React.Component {
 
+  constructor() {
+
+    super();
+
+    this.cameraClicked = this.cameraClicked.bind(this);
+  }
+
+  cameraClicked(cameraId: integer) {
+    console.log(cameraId)
+  }
+
   onMapCreated(map) {
     map.setOptions({
       disableDefaultUI: true,
@@ -31,11 +42,6 @@ class GMap extends React.Component {
       fullscreenControl: true,
       zoomControl: false
     });
-  }
-
-  onClick(e) {
-    //console.log('onClick', e);
-    console.log(this.cameraId);
   }
 
   render() {
@@ -52,18 +58,21 @@ class GMap extends React.Component {
                 loadingMessage={'Loading cameras...'}
                 params={params}
                 onMapCreated={this.onMapCreated}>
+
                 <Marker
                   lat={coords.lat}
                   lng={coords.lng}
                   draggable={false}
                   cameraId={11}
-                  onClick={this.onClick} />
+                  onClick={ () => this.cameraClicked(11) }
+                />
                 <Marker
                   lat={32.14}
                   lng={34.82}
                   draggable={false}
                   cameraId={12}
-                  onClick={this.onClick} />
+                  onClick={ () => this.cameraClicked(12) }
+                />
 
               </Gmaps>
             </div>)
