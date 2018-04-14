@@ -38,18 +38,20 @@ class GMap extends React.Component {
                 lat={coords.lat}
                 lng={coords.lng}
                 zoom={16}
-                loadingMessage={'Be happy'}
+                loadingMessage={'Loading cameras...'}
                 params={params}
                 onMapCreated={this.onMapCreated}>
                 <Marker
                   lat={coords.lat}
                   lng={coords.lng}
                   draggable={false}
+                  cameraId={11}
                   onClick={this.onClick} />
                 <Marker
                   lat={32.14}
                   lng={34.82}
                   draggable={false}
+                  cameraId={12}
                   onClick={this.onClick} />
 
               </Gmaps>
