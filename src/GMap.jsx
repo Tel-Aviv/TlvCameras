@@ -1,13 +1,14 @@
 import React from 'react';
 import { Gmaps, Marker, InfoWindow, Circle } from 'react-gmaps';
+import { createFragmentContainer, graphql} from 'react-relay';
 
-const coord = {
-  lat: 51.52,
-  lng: -0.08
+const coords = {
+  lat: 32.11,
+  lng: 34.80
 };
 
 const params = {
-  //v: '3.exp',
+  v: '3.exp',
   key: 'AIzaSyA-d98pGdPlRGw4OxvmCg8X4FoykxBYhLE'
 };
 
@@ -15,28 +16,56 @@ class GMap extends React.Component {
 
   onMapCreated(map) {
     map.setOptions({
-      disableDefaultUI: true
+      disableDefaultUI: false
     });
+  }
+
+  onDragEnd(e) {
+    console.log('onDragEnd', e);
+  }
+
+  onCloseClick() {
+    console.log('onCloseClick');
+  }
+
+  onClick(e) {
+    console.log('onClick', e);
   }
 
   render() {
 
+    let devices = this.props.devices;
+
     return (<div className="col-lg-3">
               <Gmaps
-                params = {params}
-                width={'150px'}
-                height={'100px'}
-                lat={coord.lat}
-                lng={coord.lon}
-                onMapCreated={this.onMapCreated}
-                zomm={12}>
+                width={'300px'}
+                height={'160px'}
+                lat={coords.lat}
+                lng={coords.lng}
+                zoom={16}
+                loadingMessage={'Be happy'}
+                params={params}
+                onMapCreated={this.onMapCreated}>
+                <Marker
+                  lat={coords.lat}
+                  lng={coords.lng}
+                  draggable={true}
+                  onDragEnd={this.onDragEnd} />
 
               </Gmaps>
-
             </div>)
 
   }
 
 }
 
-export default GMap;
+export default createFragmentContainer(GMap,
+graphql`
+  fragment GMap_devices on Device
+  {
+    name
+    cameraId
+    lat
+    lng
+  }
+`);
