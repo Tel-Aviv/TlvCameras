@@ -59,8 +59,10 @@ class App extends React.Component {
 
   UNSAFE_componentWillReceiveProps(nextProps){
 
+    const cameraId = nextProps.cameraId;
+
     const _variables = {
-      cameraId: nextProps.cameraId
+      cameraId: cameraId
     }
 
     const subscriptionConfig = {
@@ -78,7 +80,7 @@ class App extends React.Component {
         let _type = root.getType();
 
         const cameraRecord = root.getLinkedRecord('camera', {
-          cameraId: 0,
+          cameraId: cameraId,
           beforeHours: new Date().getHours() + 1
         });
         if( cameraRecord ) {
@@ -95,7 +97,7 @@ class App extends React.Component {
         }
 
         const trafficRecord = root.getLinkedRecord('traffic', {
-          cameraId: 0,
+          cameraId: cameraId,
           beforeHours: new Date().getHours() + 1
         });
         if( trafficRecord ) {
@@ -168,7 +170,7 @@ class App extends React.Component {
   render() {
 
       let queryVariables = {
-        cameraId: 0,
+        cameraId: 170,
         beforeHours: new Date().getHours() + 1
       };
 
