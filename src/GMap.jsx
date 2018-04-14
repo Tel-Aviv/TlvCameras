@@ -1,16 +1,8 @@
 import React from 'react';
+import { connect } from 'react-redux'
 import { Gmaps, Marker, InfoWindow, Circle } from 'react-gmaps';
 import { createFragmentContainer, graphql} from 'react-relay';
 import environment from './Environment';
-
-const mutation = graphql`
-  mutation GMap_Mutation (
-    $cameraId: Int!
-  )
-  {
-    currentCamera(cameraId: $cameraId)
-  }
-`
 
 const coords = {
   lat: 32.11,
@@ -33,6 +25,19 @@ class GMap extends React.Component {
 
   cameraClicked(cameraId: integer) {
     console.log(cameraId)
+
+    this.props.dispatch({
+      type: 'CAMERA_ID_CHANGED',
+      data: {
+        cameraId: cameraId
+      }
+
+    });
+
+    const variables = {
+      cameraId: cameraId
+    };
+
   }
 
   onMapCreated(map) {
@@ -81,7 +86,7 @@ class GMap extends React.Component {
 
 }
 
-export default createFragmentContainer(GMap,
+export default createFragmentContainer(connect()(GMap),
 graphql`
   fragment GMap_devices on Device
   {
