@@ -2,6 +2,7 @@ import React from 'react';
 import { requestSubscription, QueryRenderer, graphql } from 'react-relay';
 import environment from './Environment';
 
+import GMap from './GMap';
 import SummaryCars from './SummaryCars';
 import SummaryBikes from './SummaryBikes';
 import SummaryMotorcycles from './SummaryMotorcycles';
@@ -121,14 +122,10 @@ class AppLayout extends React.Component {
 		} else if ( props ) {
        return (
               <React.Fragment>
-                  <aside className="sidebar sidebar-expand-lg sidebar-light sidebar-sm sidebar-color-info">
-                    <header className="sidebar-header bg-info">
-                      <span className="logo">TLV Cameras</span>
-                    </header>
-    							</aside>
                   <main className="main-container">
                     <div className="main-content">
                       <div className="row">
+                        <GMap />
                         <SummaryCars totals={props.camera} />
                         <SummaryBikes totals={props.camera}/>
                         <SummaryMotorcycles totals={props.camera}  />
