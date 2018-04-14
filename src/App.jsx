@@ -3,6 +3,7 @@ import { requestSubscription, QueryRenderer, graphql } from 'react-relay';
 import { connect } from 'react-redux'
 import environment from './Environment';
 
+import Header from './Header';
 import GMap from './GMap';
 import SummaryCars from './SummaryCars';
 import SummaryBikes from './SummaryBikes';
@@ -57,14 +58,9 @@ class App extends React.Component {
   }
 
   UNSAFE_componentWillReceiveProps(nextProps){
-    console.log(nextProps);
-    //this.state.subscription.dispose();
-  }
-
-  componentDidMount() {
 
     const _variables = {
-      cameraId: 0
+      cameraId: nextProps.cameraId
     }
 
     const subscriptionConfig = {
@@ -72,7 +68,7 @@ class App extends React.Component {
       variables: _variables,
       updater: proxyStore => {
         //  Reading values off the Payload
-        const rootField = proxyStore.getRootField('newObservtion');
+        const rootField = proxyStore.getRootField('newObservation');
         const __cars = rootField.getValue('cars');
         const __bikes = rootField.getValue('bikes');
         const __motorcycles = rootField.getValue('motorcyrcles');
@@ -137,6 +133,8 @@ class App extends React.Component {
     this.setState({
       subscription: disposable
     });
+
+    //this.state.subscription.dispose();
   }
 
   renderSummaries({error, props}) {
@@ -147,7 +145,9 @@ class App extends React.Component {
                   </div>
               </main>)
 		} else if ( props ) {
-       return (<main className="main-container">
+       return (<React.Fragment>
+               <Header />
+               <main className="main-container">
                     <div className="main-content">
                       <div className="row">
                         <GMap devices={props.devices[0]} />
@@ -158,6 +158,7 @@ class App extends React.Component {
                     </div>
                     </div>
                   </main>
+                  </React.Fragment>
                )
     }
 
@@ -184,7 +185,7 @@ class App extends React.Component {
 function mapStateToProps(state) {
 
   return {
-    cameraId: state.cameraId
+    cameraId: state.cameraId,
   }
 
 }
