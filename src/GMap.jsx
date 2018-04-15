@@ -49,13 +49,30 @@ class GMap extends React.Component {
 
   render() {
 
-    let device = this.props.devices;
-    const cameraName = device.name;
-    const lng = device.lat; // !!! opposite coordinates
-    const lat = device.lng; // !!! opposite coordinates
+    let devices = this.props.devices;
+    let cameraId = this.props.cameraId;
+    let cameraName; // = devices[0].name;
+    let lng; //= devices[0].lng;
+    let lat; // = devices[0].lat;
 
-    return (<div className="col-lg-3">
-              <Gmaps
+    let _devices = devices.map( (device, index) => {
+
+        if( device.cameraId == cameraId ) {
+          lng = device.lng;
+          lat = device.lat;
+          cameraName = device.name;
+        }
+
+        return <Marker
+          key={index}
+          lat={device.lat}
+          lng={device.lng}
+          draggable={false}
+          onClick={ () => this.cameraClicked(device.cameraId, device.name) }
+        />
+      });
+
+    return (<Gmaps
                 width={'300px'}
                 height={'160px'}
                 lat={lat}
@@ -65,33 +82,23 @@ class GMap extends React.Component {
                 params={params}
                 onMapCreated={this.onMapCreated}>
 
-                <Marker
-                  lat={lat}
-                  lng={lng}
-                  draggable={false}
-                  onClick={ () => this.cameraClicked(device.cameraId, device.name) }
-                />
-                <Marker
-                  lat={32.14}
-                  lng={34.82}
-                  draggable={false}
-                  onClick={ () => this.cameraClicked(device.cameraId, device.name) }
-                />
+                {_devices}
 
-              </Gmaps>
-            </div>)
+              </Gmaps>)
 
   }
 
 }
 
-export default createFragmentContainer(connect()(GMap),
-graphql`
-  fragment GMap_devices on Device
-  {
-    name
-    cameraId
-    lat
-    lng
-  }
-`);
+export default GMap;
+
+// export default createFragmentContainer(connect()(GMap),
+// graphql`
+//   fragment GMap_devices on Device
+//   {
+//     name
+//     cameraId
+//     lat
+//     lng
+//   }
+// `);
