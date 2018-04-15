@@ -5,8 +5,7 @@ const SummaryMotorcycles = ({totals}) =>  {
 
     let count = totals.observation.motorcyrcles;
 
-    return (<div className="col-lg-3">
-              <div className="card card-body">
+    return (<div className="card card-body">
                 <h6>Motocyrcles</h6>
                   <br />
                   <p className="fs-28 fw-100">{count}</p>
@@ -14,9 +13,7 @@ const SummaryMotorcycles = ({totals}) =>  {
                     <i className="ti-stats-down text-danger mr-1"></i>
                     8% decrease from last hour
                   </div>
-
-              </div>
-            </div>);
+              </div>);
 
 
 }

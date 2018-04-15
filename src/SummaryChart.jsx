@@ -78,21 +78,17 @@ const SummaryChart = ({totals}) => {
       datasets: _series
     };
 
-    return(
-      <div className="col-12">
-        <div className="card esbCard">
-          <div className="card-header">
-            <h5>
-              <strong className="text-uppercase esbCaption">Traffic</strong>
-            </h5>
-          </div>
-          <div className="card-body">
-            <BarChart redraw data={_chartData} options={chartOptions}
-                width="1100" height="460"/>
-          </div>
-        </div>
-      </div>
-    );
+    return(<div className="card esbCard">
+              <div className="card-header">
+                <h5>
+                  <strong className="text-uppercase esbCaption">Traffic</strong>
+                </h5>
+              </div>
+              <div className="card-body">
+                <BarChart redraw data={_chartData} options={chartOptions}
+                    width="1100" height="460"/>
+              </div>
+            </div>);
 
 };
 

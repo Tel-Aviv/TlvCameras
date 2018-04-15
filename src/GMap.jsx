@@ -51,29 +51,30 @@ class GMap extends React.Component {
 
     let devices = this.props.devices;
     let cameraId = this.props.cameraId;
-    let cameraName; // = devices[0].name;
-    let lng; //= devices[0].lng;
-    let lat; // = devices[0].lat;
+    let cameraName;
+    let lng;
+    let lat;
 
-    let _devices = devices.map( (device, index) => {
+    let _devices = devices.map( (device,index) => {
 
-        if( device.cameraId == cameraId ) {
-          lng = device.lng;
-          lat = device.lat;
-          cameraName = device.name;
-        }
+      if( device.cameraId == cameraId ) {
+        lng = device.lng;
+        lat = device.lat;
+        cameraName = device.name;
+      }
 
-        return <Marker
-          key={index}
-          lat={device.lat}
-          lng={device.lng}
-          draggable={false}
-          onClick={ () => this.cameraClicked(device.cameraId, device.name) }
-        />
-      });
+      return <Marker
+                key={index}
+                lat={device.lat}
+                lng={device.lng}
+                draggable={false}
+                onClick={ () => this.cameraClicked(device.cameraId, device.name) }
+            />
+
+    });
 
     return (<Gmaps
-                width={'300px'}
+                width={'360px'}
                 height={'160px'}
                 lat={lat}
                 lng={lng}
@@ -84,14 +85,14 @@ class GMap extends React.Component {
 
                 {_devices}
 
-              </Gmaps>)
+              </Gmaps>
+            )
 
   }
 
 }
 
-export default GMap;
-
+export default connect()(GMap);
 // export default createFragmentContainer(connect()(GMap),
 // graphql`
 //   fragment GMap_devices on Device

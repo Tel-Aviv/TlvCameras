@@ -5,19 +5,15 @@ const SummaryCars = ({totals}) =>  {
 
     let count = totals.observation.cars;
 
-    return (<div className="col-lg-3">
-              <div className="card card-body">
+    return (<div className="card card-body">
                   <h6>Cars</h6>
                   <br />
                   <p className="fs-28 fw-100">{count}</p>
                   <div className="text-gray fs-12">
                     <i className="ti-stats-up text-success mr-1" aria-hidden="true"></i>
-                    12% increase from last day
+                    12% increase from last hour
                   </div>
-              </div>
-            </div>);
-
-
+              </div>);
 }
 
 export default createFragmentContainer(SummaryCars,

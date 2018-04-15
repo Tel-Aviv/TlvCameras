@@ -1,6 +1,9 @@
+// @flow
 import React from 'react';
 import { requestSubscription, QueryRenderer, graphql } from 'react-relay';
-import { connect } from 'react-redux'
+import { connect } from 'react-redux';
+import { Gmaps, Marker, InfoWindow, Circle } from 'react-gmaps';
+import Modal from 'react-modal';
 import environment from './Environment';
 
 import Header from './Header';
@@ -8,6 +11,7 @@ import GMap from './GMap';
 import SummaryCars from './SummaryCars';
 import SummaryBikes from './SummaryBikes';
 import SummaryMotorcycles from './SummaryMotorcycles';
+import SummaryPedestrians from './SummaryPedestrians';
 import SummaryChart from './SummaryChart';
 
 const summariesQuery = graphql`
@@ -19,13 +23,18 @@ query AppSummaries_Query ($cameraId: Int!,
     ...SummaryCars_totals @arguments(Id: $cameraId)
     ...SummaryBikes_totals @arguments(Id: $cameraId)
     ...SummaryMotorcycles_totals @arguments(Id: $cameraId)
+    ...SummaryPedestrians_totals
   }
   traffic(cameraId: $cameraId, beforeHours: $beforeHours) {
     ...SummaryChart_totals
   }
   devices {
-    ...GMap_devices
+    name
+    cameraId
+    lat
+    lng
   }
+
 }
 `;
 
@@ -44,14 +53,36 @@ const observationsSubscription = graphql`
   }
 `;
 
-class App extends React.Component {
+const customModalStyles = {
+  content : {
+    top                   : '50%',
+    left                  : '50%',
+    right                 : 'auto',
+    bottom                : 'auto',
+    width                 : '600px',
+    marginRight           : '-50%',
+    transform             : 'translate(-50%, -50%)'
+  }
+};
+
+type State = {
+  cameraId: number,
+  cameraName: string,
+  modalIsOpen: boolean,
+  subscription: Object
+}
+
+class App extends React.Component<Props, State> {
 
   constructor()
   {
     super();
 
     this.state = {
-      subscription: {}
+      cameraId: 71,
+      cameraName: 'Alenby Byalik',
+      subscription: {},
+      modalIsOpen: true
     }
 
     this.renderSummaries = this.renderSummaries.bind(this);
@@ -59,7 +90,16 @@ class App extends React.Component {
 
   UNSAFE_componentWillReceiveProps(nextProps){
 
+    // if( this.state.subscription ) {
+    //   this.state.subscription.dispose();
+    // }
+
     const cameraId = nextProps.cameraId;
+    ::this.establishSubscription(cameraId);
+
+  }
+
+  establishSubscription(cameraId: number) {
 
     const _variables = {
       cameraId: cameraId
@@ -136,7 +176,6 @@ class App extends React.Component {
       subscription: disposable
     });
 
-    //this.state.subscription.dispose();
   }
 
   renderSummaries({error, props}) {
@@ -147,16 +186,36 @@ class App extends React.Component {
                   </div>
               </main>)
 		} else if ( props ) {
+
+      const mapParams = {
+        v: '3.exp',
+        key: 'AIzaSyA-d98pGdPlRGw4OxvmCg8X4FoykxBYhLE'
+      };
+
        return (<React.Fragment>
                <Header />
                <main className="main-container">
                     <div className="main-content">
                       <div className="row">
-                        <GMap devices={props.devices[0]} />
-                        <SummaryCars totals={props.camera} />
-                        <SummaryBikes totals={props.camera}/>
-                        <SummaryMotorcycles totals={props.camera}  />
-                        <SummaryChart totals={props.traffic}/>
+                        <div className="col-lg-4">
+                          <GMap cameraId={this.state.cameraId} devices={props.devices} />
+                        </div>
+                        <div className="col-lg-2">
+                          <SummaryCars totals={props.camera} />
+                        </div>
+                        <div className="col-lg-2">
+                          <SummaryBikes totals={props.camera}/>
+                        </div>
+                        <div className="col-lg-2">
+                          <SummaryMotorcycles totals={props.camera}  />
+                        </div>
+                        <div className="col-lg-2">
+                          <SummaryPedestrians totals={props.camera} />
+                        </div>
+                        <div className="col-12">
+                          <SummaryChart totals={props.traffic}/>
+                        </div>
+
                     </div>
                     </div>
                   </main>
@@ -167,10 +226,18 @@ class App extends React.Component {
     return <div>Loading...</div>
   }
 
+  closeModal() {
+    this.setState({modalIsOpen: false});
+  }
+
+  cameraSelected() {
+
+  }
+
   render() {
 
       let queryVariables = {
-        cameraId: 170,
+        cameraId: this.state.cameraId,
         beforeHours: new Date().getHours() + 1
       };
 
