@@ -74,7 +74,7 @@ class GMap extends React.Component {
     });
 
     return (<Gmaps
-                width={'360px'}
+                width={'440px'}
                 height={'160px'}
                 lat={lat}
                 lng={lng}
