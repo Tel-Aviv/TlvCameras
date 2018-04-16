@@ -4,7 +4,6 @@ import { withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { Gmaps, Marker } from 'react-gmaps';
 import { createFragmentContainer, graphql} from 'react-relay';
-//import environment from './Environment';
 
 const coords = {
   lat: 32.11,

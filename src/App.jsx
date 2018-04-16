@@ -90,7 +90,7 @@ class App extends React.Component<Props, State> {
       this.state.subscription.dispose();
     }
 
-    const cameraId = nextProps.match.params.cameraId; //cameraId;
+    const cameraId = nextProps.match.params.cameraId;
     ::this.establishSubscription(cameraId);
 
   }
