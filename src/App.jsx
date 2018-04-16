@@ -1,7 +1,7 @@
 // @flow
 import React from 'react';
 import { requestSubscription, QueryRenderer, graphql } from 'react-relay';
-import { connect } from 'react-redux';
+//import { connect } from 'react-redux';
 import { Gmaps, Marker, InfoWindow, Circle } from 'react-gmaps';
 import Modal from 'react-modal';
 import environment from './Environment';
@@ -20,9 +20,9 @@ query AppSummaries_Query ($cameraId: Int!,
 {
   camera(cameraId: $cameraId, beforeHours: $beforeHours) {
     cameraId
-    ...SummaryCars_totals @arguments(Id: $cameraId)
-    ...SummaryBikes_totals @arguments(Id: $cameraId)
-    ...SummaryMotorcycles_totals @arguments(Id: $cameraId)
+    ...SummaryCars_totals
+    ...SummaryBikes_totals
+    ...SummaryMotorcycles_totals
     ...SummaryPedestrians_totals
   }
   traffic(cameraId: $cameraId, beforeHours: $beforeHours) {
@@ -31,6 +31,7 @@ query AppSummaries_Query ($cameraId: Int!,
   devices {
     name
     cameraId
+    streamUrl
     lat
     lng
   }
@@ -48,6 +49,7 @@ const observationsSubscription = graphql`
       cars
       bikes
       motorcyrcles
+      pedestrians
       when_observed
     }
   }
@@ -67,34 +69,28 @@ const customModalStyles = {
 
 type State = {
   cameraId: number,
-  cameraName: string,
-  modalIsOpen: boolean,
   subscription: Object
 }
 
 class App extends React.Component<Props, State> {
 
-  constructor()
+  state = {
+    cameraId: 0,
+    subscription: {},
+  };
+
+  constructor(props)
   {
-    super();
-
-    this.state = {
-      cameraId: 71,
-      cameraName: 'Alenby Byalik',
-      subscription: {},
-      modalIsOpen: true
-    }
-
-    this.renderSummaries = this.renderSummaries.bind(this);
+    super(props);
   }
 
   UNSAFE_componentWillReceiveProps(nextProps){
 
-    // if( this.state.subscription ) {
-    //   this.state.subscription.dispose();
-    // }
+    if( !_.isEmpty(this.state.subscription) ) {
+      this.state.subscription.dispose();
+    }
 
-    const cameraId = nextProps.cameraId;
+    const cameraId = nextProps.match.params.cameraId; //cameraId;
     ::this.establishSubscription(cameraId);
 
   }
@@ -114,6 +110,7 @@ class App extends React.Component<Props, State> {
         const __cars = rootField.getValue('cars');
         const __bikes = rootField.getValue('bikes');
         const __motorcycles = rootField.getValue('motorcyrcles');
+        const __pedestrians = rootField.getValue('pedestrians');
 
         // Reading Values off the Relay Store
         let root = proxyStore.getRoot();
@@ -134,6 +131,9 @@ class App extends React.Component<Props, State> {
 
           let observedMotorcyrcles = observationRecord.getValue('motorcyrcles');
           observationRecord.setValue(observedMotorcyrcles + __motorcycles, 'motorcyrcles');
+
+          let observedPedestrians = observationRecord.getValue('pedestrians');
+          observationRecord.setValue(observedPedestrians + __pedestrians, 'pedestrians');
         }
 
         const trafficRecord = root.getLinkedRecord('traffic', {
@@ -193,32 +193,32 @@ class App extends React.Component<Props, State> {
       };
 
        return (<React.Fragment>
-               <Header />
-               <main className="main-container">
-                    <div className="main-content">
-                      <div className="row">
-                        <div className="col-lg-4">
-                          <GMap cameraId={this.state.cameraId} devices={props.devices} />
-                        </div>
-                        <div className="col-lg-2">
-                          <SummaryCars totals={props.camera} />
-                        </div>
-                        <div className="col-lg-2">
-                          <SummaryBikes totals={props.camera}/>
-                        </div>
-                        <div className="col-lg-2">
-                          <SummaryMotorcycles totals={props.camera}  />
-                        </div>
-                        <div className="col-lg-2">
-                          <SummaryPedestrians totals={props.camera} />
-                        </div>
-                        <div className="col-12">
-                          <SummaryChart totals={props.traffic}/>
-                        </div>
+                 <Header />
+                 <main className="main-container">
+                      <div className="main-content">
+                        <div className="row">
+                          <div className="col-lg-4">
+                            <GMap cameraId={this.props.match.params.cameraId} devices={props.devices} />
+                          </div>
+                          <div className="col-lg-2">
+                            <SummaryCars totals={props.camera} />
+                          </div>
+                          <div className="col-lg-2">
+                            <SummaryBikes totals={props.camera}/>
+                          </div>
+                          <div className="col-lg-2">
+                            <SummaryMotorcycles totals={props.camera}  />
+                          </div>
+                          <div className="col-lg-2">
+                            <SummaryPedestrians totals={props.camera} />
+                          </div>
+                          <div className="col-12">
+                            <SummaryChart totals={props.traffic}/>
+                          </div>
 
-                    </div>
-                    </div>
-                  </main>
+                      </div>
+                      </div>
+                    </main>
                   </React.Fragment>
                )
     }
@@ -226,18 +226,10 @@ class App extends React.Component<Props, State> {
     return <div>Loading...</div>
   }
 
-  closeModal() {
-    this.setState({modalIsOpen: false});
-  }
-
-  cameraSelected() {
-
-  }
-
   render() {
 
       let queryVariables = {
-        cameraId: this.state.cameraId,
+        cameraId: this.props.match.params.cameraId,
         beforeHours: new Date().getHours() + 1
       };
 
@@ -245,7 +237,7 @@ class App extends React.Component<Props, State> {
                 environment={environment}
                 query={summariesQuery}
                 variables={queryVariables}
-                render={this.renderSummaries}
+                render={::this.renderSummaries}
               />
   }
 
@@ -259,4 +251,6 @@ function mapStateToProps(state) {
 
 }
 
-export default connect(mapStateToProps)(App);
+export default App;
+
+//export default connect(mapStateToProps)(App);

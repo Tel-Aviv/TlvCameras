@@ -1,3 +1,4 @@
+// @flow
 import {
   Environment,
   Network,
@@ -64,12 +65,20 @@ function setupSubscription(
 
   const subscriptionClient = new SubscriptionClient(websocketURL,
                                                     {
-                                                      reconnect: true
+                                                      reconnect: true,
+                                                      reconnectionAttempts: 5
                                                     });
+
   subscriptionClient.subscribe({query, variables},
     (error, result) => {
       observer.onNext({data: result})
-    })
+   });
+
+  // Should return Disposable or RelayObservable
+  return {
+    dispose: () => subscriptionClient.unsubscribeAll()
+  };
+
 }
 
 const environment = new Environment({

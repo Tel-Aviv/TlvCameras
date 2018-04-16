@@ -19,9 +19,6 @@ const SummaryCars = ({totals}) =>  {
 export default createFragmentContainer(SummaryCars,
 graphql`
   fragment SummaryCars_totals on Camera
-  @argumentDefinitions(
-    Id: { type: "Int", defaultValue: 1 }
-  )
   {
     observation {
       cars

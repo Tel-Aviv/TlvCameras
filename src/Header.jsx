@@ -1,3 +1,4 @@
+// @flow
 import React from 'react';
 import { connect } from 'react-redux'
 
@@ -6,16 +7,14 @@ const Header = ({cameraId, cameraName}) => {
     let _cameraId = cameraId != 0 ?
                     <div>{cameraId}</div> :
                     null;
-    let _arrowDown = cameraId == 0 ?
+    let _arrowDown = cameraId ?
+                    null :
                     <span className="topbar-btn has-new" data-toggle="dropdown">
                       <i className="ti-arrow-down">
                       </i>
-                    </span> :
-                    null;
+                    </span>;
 
-
-
-    if( cameraName == '' ) {
+    if( !cameraName ) {
       cameraName = "Please, select a camera on the map";
     }
 

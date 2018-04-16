@@ -1,8 +1,10 @@
+// @flow
 import React from 'react';
+import { withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
-import { Gmaps, Marker, InfoWindow, Circle } from 'react-gmaps';
+import { Gmaps, Marker } from 'react-gmaps';
 import { createFragmentContainer, graphql} from 'react-relay';
-import environment from './Environment';
+//import environment from './Environment';
 
 const coords = {
   lat: 32.11,
@@ -19,13 +21,12 @@ class GMap extends React.Component {
   constructor() {
 
     super();
-
-    this.cameraClicked = this.cameraClicked.bind(this);
   }
 
   cameraClicked(cameraId: integer,
                 cameraName: String) {
-    console.log(cameraId)
+
+    this.props.history.push(`/${cameraId}`);
 
     this.props.dispatch({
       type: 'CAMERA_ID_CHANGED',
@@ -43,7 +44,7 @@ class GMap extends React.Component {
       disableDefaultUI: true,
       clickableIcons: false,
       fullscreenControl: true,
-      zoomControl: false
+      zoomControl: true
     });
   }
 
@@ -54,6 +55,7 @@ class GMap extends React.Component {
     let cameraName;
     let lng;
     let lat;
+    let cameraUrl: string;
 
     let _devices = devices.map( (device,index) => {
 
@@ -61,6 +63,7 @@ class GMap extends React.Component {
         lng = device.lng;
         lat = device.lat;
         cameraName = device.name;
+        cameraUrl = device.streamUrl;
       }
 
       return <Marker
@@ -68,31 +71,34 @@ class GMap extends React.Component {
                 lat={device.lat}
                 lng={device.lng}
                 draggable={false}
-                onClick={ () => this.cameraClicked(device.cameraId, device.name) }
-            />
+                onClick={ () => {::this.cameraClicked(device.cameraId, device.name) }}
+             />
 
     });
 
-    return (<Gmaps
-                width={'440px'}
-                height={'160px'}
-                lat={lat}
-                lng={lng}
-                zoom={16}
-                loadingMessage={'Loading cameras...'}
-                params={params}
-                onMapCreated={this.onMapCreated}>
+    return (<React.Fragment>
+              <Gmaps
+                  width={'440px'}
+                  height={'160px'}
+                  lat={lat}
+                  lng={lng}
+                  zoom={16}
+                  loadingMessage={'Loading cameras...'}
+                  params={params}
+                  onMapCreated={this.onMapCreated}>
 
-                {_devices}
+                  {_devices}
 
-              </Gmaps>
+                </Gmaps>
+                <a href={cameraUrl} target='_blank'>Stream Url</a>
+              </React.Fragment>
             )
 
   }
 
 }
 
-export default connect()(GMap);
+export default withRouter(connect()(GMap));
 // export default createFragmentContainer(connect()(GMap),
 // graphql`
 //   fragment GMap_devices on Device
