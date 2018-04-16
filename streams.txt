@@ -1,0 +1,9 @@
+
+71 (GIS: 4268) =>  https://10.81.1.10/webrtc/index.html?10.81.1.10:8000&from=admin&to=20&mode=recv
+אלנבי ביאליק קבועה 1
+51, (GIS: 29866) => https://10.81.1.10/webrtc/index.html?10.81.1.10:8000&from=admin&to=6&mode=recv 
+אלנבי ביאליק קבועה 1
+24 (GIS: 29944)  => https://10.81.1.10/webrtc/index.html?10.81.1.10:8000&from=admin&to=8&mode=recv 
+חוף בוגרשוב
+23 (GIS: 2309) => 
+חוף גורדון קבועה 11
