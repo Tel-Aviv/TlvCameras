@@ -1,6 +1,6 @@
 # TlvCameras
 
-This is a frontend React app for the traffic cameras installed in Tel-Aviv city
+This is a frontend React app for the analytic traffic cameras installed in Tel-Aviv city
 
 # How to build
 1. This project is UI part of TlvCamerasGql GraphQL server. At build-time it depends on exposed GQL schema, so the first step of building is <code>yarn relay</code> that tries to download the schema and compile the sources against it.
