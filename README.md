@@ -8,6 +8,7 @@ This is a frontend React app for the analytic traffic cameras installed in Tel-A
 $ yarn relay
 ```
 that tries to download the schema and compile the sources against it.
+
 2. 
 ```sh 
 $ yarn build
