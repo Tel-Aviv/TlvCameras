@@ -17,7 +17,7 @@
 73 (GIS: 29988) => https://10.81.1.10/webrtc/index.html?10.81.1.10:8000&from=admin&to=25&mode=recv
 
 ===
-  static getCameraRules(cameraId: integer) {
+ static getCameraRules(cameraId: integer) {
     switch( cameraId ) {
 
       case 73: {
@@ -42,3 +42,114 @@
 
     }
   }
+
+  static translate(cameraId: integer,
+                   ruleId: integer) {
+
+    let cars = 0;
+    let motorcycles = 0;
+    let bikes = 0;
+    let pedestrians = 0;
+
+    switch( cameraId ) {
+
+      case 73: {
+
+        switch( ruleId ) {
+
+          case 216:
+          case 217: {
+            motorcycles = 1;
+          }
+          break;
+
+          case 218:
+          case 219: {
+            bikes = 1;
+          }
+          break;
+
+          case 215:
+          case 214: {
+            cars = 1;
+          }
+          break;
+        }
+      }
+      break;
+
+      case 72: {
+        switch( ruleId ) {
+          case 211: {
+            bikes = 1;
+          }
+          break;
+
+          case 210: {
+            cars = 1;
+          }
+          break;
+
+          case 209: {
+            motorcycles = 1;
+          }
+          break;
+        }
+      }
+      break;
+
+      case 71: {
+        switch( ruleId  ) {
+            case 203: {
+              cars = 1;
+            }
+            break;
+
+            case 204: {
+              bikes = 1;
+            }
+            break;
+
+            case 205: {
+              motorcycles = 1;
+            }
+            break;
+        }
+      }
+      break;
+
+      case 23: {
+        switch( ruleId ) {
+            case 155: {
+              pedestrians = 1;
+            }
+            break;
+
+            case 154: {
+              bikes = 1;
+            }
+            break;
+        }
+      }
+      break;
+
+      case 51: {
+        switch ( ruleId ) {
+          case 161:
+            pedestrians = 1;
+            break;
+
+          case 162:
+            bikes = 1;
+            break;
+
+          case 206:
+            cars = 1;
+            break;
+
+        }
+      }
+
+      default:
+        return null;
+    }
