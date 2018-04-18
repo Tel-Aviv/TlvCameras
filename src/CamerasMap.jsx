@@ -47,7 +47,7 @@ const CamerasMap = compose(
     options={mapOptions}>
 
     {
-      devices.list.map( (device, index) => {
+      devices.map( (device, index) => {
 
         // return <CameraMarker key={index} device={device} />;
         const markerCoords = {
@@ -72,10 +72,8 @@ const CamerasMap = compose(
 
 export default createFragmentContainer(withRouter(CamerasMap),
 graphql`
-  fragment CamerasMap_devices on Devices
+  fragment CamerasMap_devices on Device @relay(plural: true)
   {
-    list {
-      ...CameraMarker_device @relay(mask: false)
-    }
+    ...CameraMarker_device @relay(mask: false)
   }
 `);
