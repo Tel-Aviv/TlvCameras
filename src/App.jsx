@@ -1,13 +1,11 @@
 // @flow
 import React from 'react';
 import { requestSubscription, QueryRenderer, graphql } from 'react-relay';
-//import { connect } from 'react-redux';
-import { Gmaps, Marker, InfoWindow, Circle } from 'react-gmaps';
 import Modal from 'react-modal';
 import environment from './Environment';
 
 import Header from './Header';
-import GMap from './GMap';
+import CamerasMap from './CamerasMap';
 import SummaryCars from './SummaryCars';
 import SummaryBikes from './SummaryBikes';
 import SummaryMotorcycles from './SummaryMotorcycles';
@@ -29,11 +27,7 @@ query AppSummaries_Query ($cameraId: Int!,
     ...SummaryChart_totals
   }
   devices {
-    name
-    cameraId
-    streamUrl
-    lat
-    lng
+    ...CamerasMap_devices
   }
 
 }
@@ -48,7 +42,7 @@ const observationsSubscription = graphql`
     newObservation (cameraId: $cameraId) {
       cars
       bikes
-      motorcyrcles
+      motorcycles
       pedestrians
       when_observed
     }
@@ -84,6 +78,10 @@ class App extends React.Component<Props, State> {
     super(props);
   }
 
+  componentDidMount() {
+    ::this.establishSubscription(this.props.match.params.cameraId);
+  }
+
   UNSAFE_componentWillReceiveProps(nextProps){
 
     if( !_.isEmpty(this.state.subscription) ) {
@@ -109,7 +107,7 @@ class App extends React.Component<Props, State> {
         const rootField = proxyStore.getRootField('newObservation');
         const __cars = rootField.getValue('cars');
         const __bikes = rootField.getValue('bikes');
-        const __motorcycles = rootField.getValue('motorcyrcles');
+        const __motorcycles = rootField.getValue('motorcycles');
         const __pedestrians = rootField.getValue('pedestrians');
 
         // Reading Values off the Relay Store
@@ -129,8 +127,8 @@ class App extends React.Component<Props, State> {
           let observedBikes = observationRecord.getValue('bikes');
           observationRecord.setValue(observedBikes + __bikes, 'bikes');
 
-          let observedMotorcyrcles = observationRecord.getValue('motorcyrcles');
-          observationRecord.setValue(observedMotorcyrcles + __motorcycles, 'motorcyrcles');
+          let observedMotorcyrcles = observationRecord.getValue('motorcycles');
+          observationRecord.setValue(observedMotorcyrcles + __motorcycles, 'motorcycles');
 
           let observedPedestrians = observationRecord.getValue('pedestrians');
           observationRecord.setValue(observedPedestrians + __pedestrians, 'pedestrians');
@@ -163,7 +161,7 @@ class App extends React.Component<Props, State> {
 
       },
       onError: error => {
-        console.error(`An error occured:`, error);
+        console.error(`An error occured: ${error}`);
       }
     };
 
@@ -198,7 +196,7 @@ class App extends React.Component<Props, State> {
                       <div className="main-content">
                         <div className="row">
                           <div className="col-lg-4">
-                            <GMap cameraId={this.props.match.params.cameraId} devices={props.devices} />
+                            <CamerasMap devices={props.devices} />
                           </div>
                           <div className="col-lg-2">
                             <SummaryCars totals={props.camera} />
@@ -243,14 +241,4 @@ class App extends React.Component<Props, State> {
 
 }
 
-function mapStateToProps(state) {
-
-  return {
-    cameraId: state.cameraId,
-  }
-
-}
-
 export default App;
-
-//export default connect(mapStateToProps)(App);

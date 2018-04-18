@@ -3,7 +3,7 @@ import { createFragmentContainer, graphql} from 'react-relay';
 
 const SummaryMotorcycles = ({totals}) =>  {
 
-    let count = totals.observation.motorcyrcles;
+    let count = totals.observation.motorcycles;
 
     return (<div className="card card-body">
                 <h6>Motocyrcles</h6>
@@ -23,7 +23,7 @@ graphql`
   fragment SummaryMotorcycles_totals on Camera
   {
     observation {
-      motorcyrcles
+      motorcycles
       when_observed
     }
   }
